@@ -2,12 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Models\Category as CategoryModel;
 use App\Presenters\PaginationPresenter;
-use Core\Domain\Entity\Category as CategoryEntity;
-use Core\Domain\Repository\CategoryRepositoryInterface;
+use App\Models\Category as CategoryModel;
 use Core\Domain\Repository\PaginationInterface;
-use stdClass;
+use Core\Domain\Entity\Category as CategoryEntity;
+use Core\Domain\Exception\NotFoundDomainException;
+use Core\Domain\Repository\CategoryRepositoryInterface;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
@@ -31,6 +31,11 @@ class CategoryRepository implements CategoryRepositoryInterface
     public function findById(string $id): CategoryEntity
     {
         $result = $this->model->find($id);
+
+        if (is_null($result)) {
+            throw new NotFoundDomainException('Category not found.');
+        }
+
         return $this->toCategoryEntity($result);
     }
 
