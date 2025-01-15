@@ -11,12 +11,7 @@ use Core\Domain\Repository\CategoryRepositoryInterface;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
-    private CategoryModel $model;
-
-    public function __construct(CategoryModel $model)
-    {
-        $this->model = $model;
-    }
+    public function __construct(private CategoryModel $model) {}
 
     public function insert(CategoryEntity $entity): CategoryEntity
     {
@@ -41,19 +36,22 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function findAll(string $filter = '', string $order = 'DESC'): array
     {
-        $results = $this->model->all();
-        $categories = [];
+        $categories = $this->model
+            ->when(!empty($filter), fn($query) => $query->where('name', 'like', "%$filter%"))
+            ->orderBy('id', $order)
+            ->get();
 
-        foreach ($results as $result) {
-            $categories[] = $this->toCategoryEntity($result);
-        }
-
-        return $categories;
+        return $categories->toArray();
     }
 
     public function paginate(string $filter = '', string $order = 'DESC', int $page = 1, int $totalPage = 15): PaginationInterface
     {
-        return new PaginationPresenter(null);
+        $paginator = $this->model
+            ->when(!empty($filter), fn($query) => $query->where('name', 'like', "%$filter%"))
+            ->orderBy('id', $order)
+            ->paginate($totalPage);
+
+        return new PaginationPresenter($paginator);
     }
 
     public function update(CategoryEntity $entity): CategoryEntity
