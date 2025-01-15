@@ -9,12 +9,7 @@ use Core\Domain\Repository\CategoryRepositoryInterface;
 
 class CreateCategoryUseCase
 {
-    protected $repository;
-
-    public function __construct(CategoryRepositoryInterface $repository)
-    {
-        $this->repository = $repository;
-    }
+    public function __construct(private CategoryRepositoryInterface $repository) {}
 
     public function execute(CategoryCreateInputDTO $input): CategoryOutputDTO
     {
