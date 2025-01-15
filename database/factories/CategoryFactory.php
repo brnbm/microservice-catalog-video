@@ -20,7 +20,7 @@ class CategoryFactory extends Factory
             'id' => $this->faker->uuid,
             'name' => $this->faker->name,
             'description' => $this->faker->sentence(5),
-            'is_active' => rand(0, 1),
+            'is_active' => true,
             'created_at' => now()
         ];
     }

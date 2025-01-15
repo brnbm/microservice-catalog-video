@@ -37,6 +37,9 @@ class CategoryRepositoryTest extends TestCase
 
     public function testFindById()
     {
+        /**
+         * * Gera 1 registro fake no banco de dados testing
+         */
         $category = CategoryModel::factory()->create();
 
         $response = $this->repository->findById($category->id);
@@ -53,5 +56,16 @@ class CategoryRepositoryTest extends TestCase
         } catch (Throwable $th) {
             $this->assertInstanceOf(NotFoundDomainException::class, $th);
         }
+    }
+
+    public function testFindAll()
+    {
+        /**
+         * * Gera 10 registros fake no banco de dados testing
+         */
+        CategoryModel::factory()->count(10)->create();
+
+        $response = $this->repository->findAll();
+        $this->assertCount(10, $response);
     }
 }

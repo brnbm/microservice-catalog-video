@@ -41,7 +41,14 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function findAll(string $filter = '', string $order = 'DESC'): array
     {
-        return [];
+        $results = $this->model->all();
+        $categories = [];
+
+        foreach ($results as $result) {
+            $categories[] = $this->toCategoryEntity($result);
+        }
+
+        return $categories;
     }
 
     public function paginate(string $filter = '', string $order = 'DESC', int $page = 1, int $totalPage = 15): PaginationInterface
