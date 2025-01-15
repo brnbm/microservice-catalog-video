@@ -2,13 +2,15 @@
 
 namespace Tests\Feature\App\Repositories;
 
+use stdClass;
+use Throwable;
 use Tests\TestCase;
 use App\Repositories\CategoryRepository;
 use App\Models\Category as CategoryModel;
+use Core\Domain\Repository\PaginationInterface;
 use Core\Domain\Entity\Category as CategoryEntity;
 use Core\Domain\Exception\NotFoundDomainException;
 use Core\Domain\Repository\CategoryRepositoryInterface;
-use Throwable;
 
 class CategoryRepositoryTest extends TestCase
 {
@@ -67,5 +69,25 @@ class CategoryRepositoryTest extends TestCase
 
         $response = $this->repository->findAll();
         $this->assertCount(10, $response);
+    }
+
+    public function testPaginate()
+    {
+        CategoryModel::factory()->count(20)->create();
+
+        $perPage = 10;
+        $response = $this->repository->paginate(totalPage: $perPage);
+
+        $this->assertInstanceOf(PaginationInterface::class, $response);
+        $this->assertEquals($perPage, $response->perPage());
+        $this->assertContainsOnlyInstancesOf(stdClass::class, $response->items());
+    }
+
+    public function testPaginateEmpty()
+    {
+        $response = $this->repository->paginate();
+
+        $this->assertInstanceOf(PaginationInterface::class, $response);
+        $this->assertEquals(0, $response->total());
     }
 }
