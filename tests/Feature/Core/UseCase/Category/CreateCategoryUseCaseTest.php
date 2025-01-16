@@ -5,7 +5,6 @@ namespace Tests\Feature\Core\UseCase\Category;
 use Tests\TestCase;
 use App\Repositories\CategoryRepository;
 use App\Models\Category as CategoryModel;
-use Core\UseCase\DTO\Category\CategoryOutputDTO;
 use Core\UseCase\Category\CreateCategoryUseCase;
 use Core\UseCase\DTO\Category\CategoryCreateInputDTO;
 
