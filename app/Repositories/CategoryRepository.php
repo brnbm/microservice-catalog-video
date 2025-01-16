@@ -15,23 +15,23 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function insert(CategoryEntity $entity): CategoryEntity
     {
-        $result = $this->model->create([
+        $data = $this->model->create([
             'id' => $entity->id(),
             'name' => $entity->name
         ]);
 
-        return $this->toCategoryEntity($result);
+        return $this->toCategoryEntity($data);
     }
 
     public function findById(string $id): CategoryEntity
     {
-        $result = $this->model->find($id);
+        $data = $this->model->find($id);
 
-        if (is_null($result)) {
+        if (is_null($data)) {
             throw new NotFoundDomainException('Category not found.');
         }
 
-        return $this->toCategoryEntity($result);
+        return $this->toCategoryEntity($data);
     }
 
     public function findAll(string $filter = '', string $order = 'DESC'): array
@@ -56,7 +56,18 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function update(CategoryEntity $entity): CategoryEntity
     {
-        return new CategoryEntity();
+        $data = $this->model->find($entity->id);
+
+        if (is_null($data)) {
+            throw new NotFoundDomainException('Category not found.');
+        }
+
+        $data->update([
+            'name' => $entity->name,
+            'is_active' => $entity->isActive
+        ]);
+
+        return $this->toCategoryEntity($data);
     }
 
     public function delete(string $id): bool
@@ -68,7 +79,10 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         return new CategoryEntity(
             id: $data->id,
-            name: $data->name
+            name: $data->name,
+            description: $data->description,
+            isActive: $data->is_active,
+            createdAt: $data->created_at
         );
     }
 }
