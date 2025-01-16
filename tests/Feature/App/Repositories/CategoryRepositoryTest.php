@@ -54,7 +54,7 @@ class CategoryRepositoryTest extends TestCase
     public function testFindByIdNotFound()
     {
         try {
-            $this->repository->findById('fakeValue');
+            $this->repository->findById('fakeID');
         } catch (Throwable $th) {
             $this->assertInstanceOf(NotFoundDomainException::class, $th);
         }
@@ -114,6 +114,24 @@ class CategoryRepositoryTest extends TestCase
 
         try {
             $this->repository->update($categoryEntity);
+        } catch (Throwable $th) {
+            $this->assertInstanceOf(NotFoundDomainException::class, $th);
+        }
+    }
+
+    public function testDelete()
+    {
+        $category = CategoryModel::factory()->create();
+
+        $isDeleted = $this->repository->delete($category->id);
+
+        $this->assertTrue($isDeleted);
+    }
+
+    public function testDeleteException()
+    {
+        try {
+            $this->repository->delete('fakeID');
         } catch (Throwable $th) {
             $this->assertInstanceOf(NotFoundDomainException::class, $th);
         }

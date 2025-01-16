@@ -17,7 +17,10 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         $data = $this->model->create([
             'id' => $entity->id(),
-            'name' => $entity->name
+            'name' => $entity->name,
+            'description' => $entity->description,
+            'is_active' => $entity->isActive,
+            'created_at' => $entity->createdAt
         ]);
 
         return $this->toCategoryEntity($data);
@@ -72,7 +75,13 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function delete(string $id): bool
     {
-        return true;
+        $data = $this->model->find($id);
+
+        if (is_null($data)) {
+            throw new NotFoundDomainException('Category not found.');
+        }
+
+        return $data->delete();
     }
 
     private function toCategoryEntity(object $data): CategoryEntity
