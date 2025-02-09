@@ -9,6 +9,10 @@ use Core\Domain\Entity\Category as CategoryEntity;
 use Core\Domain\Exception\NotFoundDomainException;
 use Core\Domain\Repository\CategoryRepositoryInterface;
 
+/**
+ * Repository:
+ * * Abstrai a persistência de dados.
+ */
 class CategoryRepository implements CategoryRepositoryInterface
 {
     public function __construct(private CategoryModel $model) {}

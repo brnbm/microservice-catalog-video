@@ -7,6 +7,10 @@ use Core\UseCase\DTO\Category\CategoryCreateInputDTO;
 use Core\UseCase\DTO\Category\CategoryOutputDTO;
 use Core\Domain\Repository\CategoryRepositoryInterface;
 
+/**
+ * Use Case:
+ * * Representa um processo específico da aplicação.
+ */
 class CreateCategoryUseCase
 {
     public function __construct(private CategoryRepositoryInterface $repository) {}
