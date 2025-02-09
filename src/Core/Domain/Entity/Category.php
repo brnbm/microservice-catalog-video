@@ -9,7 +9,7 @@ use DateTime;
 
 /**
  * Entidade:
- * Representa um objeto do mundo real no sistema e contém a lógica de negócio.
+ * * Representa um objeto do mundo real no sistema e contém a lógica de negócio.
  */
 class Category
 {
