@@ -71,6 +71,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         $data->update([
             'name' => $entity->name,
+            'description' => $entity->description,
             'is_active' => $entity->isActive
         ]);
 
