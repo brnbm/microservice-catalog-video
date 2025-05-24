@@ -8,10 +8,12 @@ use App\Http\Resources\CategoryResource;
 use App\Http\Requests\StoreCategoryRequest;
 use Core\UseCase\Category\{
     CreateCategoryUseCase,
-    ListCategoriesUseCase
+    ListCategoriesUseCase,
+    ListCategoryUseCase
 };
 use Core\UseCase\DTO\Category\{
     CategoryCreateInputDTO,
+    CategoryInputDTO,
     ListCategoriesInputDTO
 };
 use Symfony\Component\HttpFoundation\Response;
@@ -54,5 +56,12 @@ class CategoryController extends Controller
             ->additional(['message' => 'Category created successfully'])
             ->response()
             ->setStatusCode(Response::HTTP_CREATED);
+    }
+
+    public function show($id, ListCategoryUseCase $useCase)
+    {
+        $responseUseCase = $useCase->execute(new CategoryInputDTO(id: $id));
+
+        return (new CategoryResource(collect($responseUseCase)))->response();
     }
 }
