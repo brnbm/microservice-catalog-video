@@ -11,6 +11,7 @@ use App\Http\Requests\{
 };
 use Core\UseCase\Category\{
     CreateCategoryUseCase,
+    DeleteCategoryUseCase,
     ListCategoriesUseCase,
     ListCategoryUseCase,
     UpdateCategoryUseCase
@@ -82,5 +83,12 @@ class CategoryController extends Controller
         );
 
         return (new CategoryResource(collect($responseUseCase)))->response();
+    }
+
+    public function destroy($id, DeleteCategoryUseCase $useCase)
+    {
+        $useCase->execute(new CategoryInputDTO(id: $id));
+
+        return response()->noContent();
     }
 }
