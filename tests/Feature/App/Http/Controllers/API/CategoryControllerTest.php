@@ -13,11 +13,13 @@ use Illuminate\Http\{
     JsonResponse
 };
 use App\Http\Requests\{
+    DeleteCategoryRequest,
     StoreCategoryRequest,
     UpdateCategoryRequest
 };
 use Core\UseCase\Category\{
     CreateCategoryUseCase,
+    DeleteCategoryUseCase,
     ListCategoriesUseCase,
     ListCategoryUseCase,
     UpdateCategoryUseCase
@@ -96,8 +98,6 @@ class CategoryControllerTest extends TestCase
         $updateCategoryUseCase = new UpdateCategoryUseCase($this->repository);
         $response = $this->controller->update($category->id, $request, $updateCategoryUseCase);
 
-        $responseData = $response->getData();
-
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertDatabaseHas('categories', [
@@ -105,6 +105,18 @@ class CategoryControllerTest extends TestCase
             'description' => $request->description,
             'is_active' => $request->is_active,
         ]);
+    }
+
+    #[Test]
+    public function destroy(): void
+    {
+        $category = CategoryModel::factory()->create();
+
+        $deleteCategoryUseCase = new DeleteCategoryUseCase($this->repository);
+        $response = $this->controller->destroy($category->id, $deleteCategoryUseCase);
+
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+        $this->assertSoftDeleted($category);
     }
 
     protected function setUp(): void
