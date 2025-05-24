@@ -10,6 +10,7 @@ use Core\Domain\Repository\CategoryRepositoryInterface;
 /**
  * Use Case:
  * * Representa um processo específico da aplicação.
+ * * Nesse caso, criar uma nova categoria.
  */
 class CreateCategoryUseCase
 {
