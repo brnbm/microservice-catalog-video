@@ -6,17 +6,21 @@ use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 use App\Repositories\CategoryRepository;
 use App\Models\Category as CategoryModel;
-use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Controllers\Api\CategoryController;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\{
     Request,
     JsonResponse
 };
+use App\Http\Requests\{
+    StoreCategoryRequest,
+    UpdateCategoryRequest
+};
 use Core\UseCase\Category\{
     CreateCategoryUseCase,
     ListCategoriesUseCase,
-    ListCategoryUseCase
+    ListCategoryUseCase,
+    UpdateCategoryUseCase
 };
 use Symfony\Component\HttpFoundation\{
     ParameterBag,
@@ -74,6 +78,33 @@ class CategoryControllerTest extends TestCase
 
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertEquals($category->id, $responseData->data->id);
+    }
+
+    #[Test]
+    public function update(): void
+    {
+        $category = CategoryModel::factory()->create();
+
+        $request = new UpdateCategoryRequest();
+        $request->headers->set('content-type', 'application/json');
+        $request->setJson(new ParameterBag([
+            'name' => 'Updated name Category',
+            'description' => 'Updated Description Category',
+            'is_active' => false,
+        ]));
+
+        $updateCategoryUseCase = new UpdateCategoryUseCase($this->repository);
+        $response = $this->controller->update($category->id, $request, $updateCategoryUseCase);
+
+        $responseData = $response->getData();
+
+        $this->assertInstanceOf(JsonResponse::class, $response);
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertDatabaseHas('categories', [
+            'name' => $request->name,
+            'description' => $request->description,
+            'is_active' => $request->is_active,
+        ]);
     }
 
     protected function setUp(): void
