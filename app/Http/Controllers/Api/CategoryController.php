@@ -44,9 +44,7 @@ class CategoryController extends Controller
             }
         }
 
-        return CategoryResource::collection(
-            collect($responseUseCase->items)
-        )->additional($meta);
+        return CategoryResource::collection($responseUseCase->items)->additional($meta);
     }
 
     public function store(StoreCategoryRequest $request, CreateCategoryUseCase $useCase)
@@ -58,7 +56,7 @@ class CategoryController extends Controller
             )
         );
 
-        return (new CategoryResource(collect($responseUseCase)))
+        return (new CategoryResource($responseUseCase))
             ->additional(['message' => 'Category created successfully'])
             ->response()
             ->setStatusCode(Response::HTTP_CREATED);
@@ -68,7 +66,7 @@ class CategoryController extends Controller
     {
         $responseUseCase = $useCase->execute(new CategoryInputDTO(id: $id));
 
-        return (new CategoryResource(collect($responseUseCase)))->response();
+        return (new CategoryResource($responseUseCase))->response();
     }
 
     public function update($id, UpdateCategoryRequest $request, UpdateCategoryUseCase $useCase)
@@ -82,7 +80,7 @@ class CategoryController extends Controller
             )
         );
 
-        return (new CategoryResource(collect($responseUseCase)))->response();
+        return (new CategoryResource($responseUseCase))->response();
     }
 
     public function destroy($id, DeleteCategoryUseCase $useCase)
