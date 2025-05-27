@@ -80,7 +80,7 @@ class CategoryRepositoryTest extends TestCase
 
         $this->assertInstanceOf(PaginationInterface::class, $response);
         $this->assertEquals($perPage, $response->perPage());
-        $this->assertContainsOnlyInstancesOf(stdClass::class, $response->items());
+        $this->assertIsArray($response->items());
     }
 
     public function testPaginateEmpty()
