@@ -29,4 +29,11 @@ class CategoryApiTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
         $this->assertEquals($numberPage, $response->json('meta.current_page'));
     }
+
+    #[Test]
+    public function listNotFound(): void
+    {
+        $response = $this->getJson("$this->endpoint/fakeValue");
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
+    }
 }
