@@ -82,7 +82,6 @@ class CategoryApiTest extends TestCase
         $data = ['name' => 'Updated Category Name'];
 
         $response = $this->putJson("{$this->uri}/{$category->id}", $data);
-        $response->dump();
         $response->assertStatus(Response::HTTP_OK);
         $this->assertEquals($data['name'], $response->json('data.name'));
     }
