@@ -96,7 +96,8 @@ class CategoryRepository implements CategoryRepositoryInterface
             name: $data->name,
             description: $data->description,
             isActive: $data->is_active,
-            createdAt: $data->created_at
+            createdAt: $data->created_at,
+            updatedAt: $data->updated_at
         );
     }
 }

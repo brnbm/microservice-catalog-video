@@ -9,21 +9,18 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
-    public function register(): void
+    public function render($request, Throwable $exception)
     {
-        $this->renderable(
-            fn(NotFoundDomainException $e, $request) =>
-            response()->json([
-                'message' => $e->getMessage()
-            ], Response::HTTP_NOT_FOUND)
-        );
+        if ($exception instanceof NotFoundDomainException)
+            return $this->showError($exception->getMessage(), Response::HTTP_NOT_FOUND);
 
-        $this->renderable(
-            fn(Throwable $e, $request) =>
-            response()->json([
-                'message' => 'Internal server error.',
-                'exception' => config('app.debug') ? $e->getMessage() : null,
-            ], Response::HTTP_INTERNAL_SERVER_ERROR)
-        );
+        return parent::render($request, $exception);
+    }
+
+    private function showError(String $message, int $statusCode)
+    {
+        return response()->json([
+            'message' => $message
+        ], $statusCode);
     }
 }

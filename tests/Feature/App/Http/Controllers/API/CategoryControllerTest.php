@@ -91,8 +91,7 @@ class CategoryControllerTest extends TestCase
         $request->headers->set('content-type', 'application/json');
         $request->setJson(new ParameterBag([
             'name' => 'Updated name Category',
-            'description' => 'Updated Description Category',
-            'is_active' => false,
+            'description' => 'Updated Description Category'
         ]));
 
         $updateCategoryUseCase = new UpdateCategoryUseCase($this->repository);
@@ -102,8 +101,7 @@ class CategoryControllerTest extends TestCase
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertDatabaseHas('categories', [
             'name' => $request->name,
-            'description' => $request->description,
-            'is_active' => $request->is_active,
+            'description' => $request->description
         ]);
     }
 

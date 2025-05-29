@@ -20,7 +20,7 @@ class CreateCategoryUseCase
     {
         $category = new Category(
             name: $input->name,
-            description: $input->description,
+            description: $input->description ?? '',
             isActive: $input->isActive
         );
         $newCategory = $this->repository->insert($category);

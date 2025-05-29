@@ -76,7 +76,6 @@ class CategoryController extends Controller
                 id: $id,
                 name: $request->name,
                 description: $request->description,
-                isActive: $request->is_active
             )
         );
 

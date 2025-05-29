@@ -13,7 +13,11 @@ class UpdateCategoryUseCase
     public function execute(CategoryUpdateInputDTO $input): CategoryOutputDTO
     {
         $category = $this->repository->findById($input->id);
-        $category->update($input->name, $input->description, $input->isActive);
+        $category->update(
+            $input->name,
+            $input->description ?? $category->description,
+            $input->isActive
+        );
 
         $updatedCategory = $this->repository->update($category);
 
@@ -22,7 +26,8 @@ class UpdateCategoryUseCase
             name: $updatedCategory->name,
             description: $updatedCategory->description,
             is_active: $updatedCategory->isActive,
-            created_at: $updatedCategory->createdAt()
+            created_at: $updatedCategory->createdAt(),
+            updated_at: $updatedCategory->updatedAt()
         );
     }
 }
