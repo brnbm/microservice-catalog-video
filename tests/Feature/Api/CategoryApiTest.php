@@ -85,4 +85,24 @@ class CategoryApiTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
         $this->assertEquals($data['name'], $response->json('data.name'));
     }
+
+    #[Test]
+    public function notFoundDestroy(): void
+    {
+        $response = $this->deleteJson("{$this->uri}/fakeValue");
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
+    }
+
+    #[Test]
+    public function destroy(): void
+    {
+        $category = Category::factory()->create();
+
+        $response = $this->deleteJson("{$this->uri}/{$category->id}");
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+        $this->assertDatabaseMissing('categories', [
+            'id' => $category->id,
+            'deleted_at' => null,
+        ]);
+    }
 }
