@@ -14,7 +14,7 @@ class Uuid
 
     public static function random(): self
     {
-        return new self(RamseyUuid::uuid4()->toString());
+        return new self(RamseyUuid::uuid7()->toString());
     }
 
     public function __toString(): string
