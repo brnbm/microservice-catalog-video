@@ -20,8 +20,8 @@ class CategoryResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'is_active' => $this->is_active,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => Carbon::parse($this->created_at)->setTimezone('America/Sao_Paulo')->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::parse($this->updated_at)->setTimezone('America/Sao_Paulo')->format('Y-m-d H:i:s'),
         ];
     }
 }

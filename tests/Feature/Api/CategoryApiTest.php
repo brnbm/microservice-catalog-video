@@ -16,10 +16,20 @@ class CategoryApiTest extends TestCase
     {
         $response = $this->getJson($this->uri);
         $response->assertStatus(200);
+        $response->assertJsonCount(0, 'data');
     }
 
     #[Test]
     public function listAll(): void
+    {
+        Category::factory()->count(30)->create();
+
+        $response = $this->getJson($this->uri);
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
+    #[Test]
+    public function listPaginate(): void
     {
         Category::factory()->count(30)->create();
 
@@ -28,6 +38,7 @@ class CategoryApiTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
         $this->assertEquals($numberPage, $response->json('meta.current_page'));
+        $this->assertEquals(30, $response->json('meta.total'));
     }
 
     #[Test]
