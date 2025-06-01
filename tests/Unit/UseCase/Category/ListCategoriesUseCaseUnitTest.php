@@ -4,16 +4,21 @@ namespace Tests\Unit\UseCase\Category;
 
 use Mockery;
 use stdClass;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
-use Core\Domain\Repository\PaginationInterface;
 use Core\UseCase\Category\ListCategoriesUseCase;
 use Core\UseCase\DTO\Category\ListCategoriesInputDTO;
 use Core\UseCase\DTO\Category\ListCategoriesOutputDTO;
 use Core\Domain\Repository\CategoryRepositoryInterface;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use Tests\TestCase;
 
 class ListCategoriesUseCaseUnitTest extends TestCase
 {
+    /**
+     * Recomendável quando há mais de um teste utilizando Mockery
+     */
+    use MockeryPHPUnitIntegration;
+
     private $mockRepository;
     private $mockPagination;
     private $categoriesInputDto;
@@ -58,29 +63,5 @@ class ListCategoriesUseCaseUnitTest extends TestCase
         $this->assertInstanceOf(ListCategoriesOutputDTO::class, $responseUseCase);
         $this->assertInstanceOf(stdClass::class, $responseUseCase->items[0]);
         $this->assertCount(1, $responseUseCase->items);
-    }
-
-    protected function generateMockPagination(array $items = [])
-    {
-        $mockPagination = Mockery::mock(stdClass::class, PaginationInterface::class);
-        $mockPagination->shouldReceive('items')->andReturn($items);
-        $mockPagination->shouldReceive('total')->andReturn(0);
-        $mockPagination->shouldReceive('lastPage')->andReturn(0);
-        $mockPagination->shouldReceive('firstPage')->andReturn(0);
-        $mockPagination->shouldReceive('currentPage')->andReturn(0);
-        $mockPagination->shouldReceive('perPage')->andReturn(0);
-        $mockPagination->shouldReceive('to')->andReturn(0);
-        $mockPagination->shouldReceive('from')->andReturn(0);
-
-        return $mockPagination;
-    }
-
-    /**
-     * Necessário quando há mais de um teste utilizando Mockery
-     */
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
     }
 }
