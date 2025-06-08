@@ -41,6 +41,11 @@ class CategoryRepository implements CategoryRepositoryInterface
         return $this->toCategoryEntity($data);
     }
 
+    public function getListIdsByIds(array $ids = []): array
+    {
+        return $this->model->whereIn('id', $ids)->pluck('id');
+    }
+
     public function findAll(string $filter = '', string $order = 'DESC'): array
     {
         $categories = $this->model
