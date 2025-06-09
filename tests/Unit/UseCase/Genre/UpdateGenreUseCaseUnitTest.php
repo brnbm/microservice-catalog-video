@@ -43,20 +43,20 @@ class UpdateGenreUseCaseUnitTest extends TestCase
     {
         $this->expectException(NotFoundDomainException::class);
 
-        $useCase = new UpdateGenreUseCase($this->mockRepository(), $this->mockCategoryRepository(), $this->mockTransactions());
+        $useCase = new UpdateGenreUseCase($this->mockRepository(0), $this->mockCategoryRepository(), $this->mockTransactions());
 
         $this->mockUpdateInputDto($this->mockEntity->id, 'Genre Updated', ['UuidCategory-1']);
 
         $useCase->execute($this->mockUpdateInputDto);
     }
 
-    private function mockRepository(): GenreRepositoryInterface
+    private function mockRepository(int $timesCalled = 1): GenreRepositoryInterface
     {
         $this->mockEntity();
 
         $this->mockRepository = Mockery::mock(\stdClass::class, GenreRepositoryInterface::class);
-        $this->mockRepository->shouldReceive('findById')->andReturn($this->mockEntity);
-        $this->mockRepository->shouldReceive('update')->andReturn($this->mockEntity);
+        $this->mockRepository->shouldReceive('findById')->once()->andReturn($this->mockEntity);
+        $this->mockRepository->shouldReceive('update')->times($timesCalled)->andReturn($this->mockEntity);
         return $this->mockRepository;
     }
 

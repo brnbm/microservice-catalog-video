@@ -54,7 +54,7 @@ class CreateGenreUseCaseUnitTest extends TestCase
         $this->mockEntity($name);
 
         $useCase = new CreateGenreUseCase(
-            $this->mockRepository(),
+            $this->mockRepository(0),
             $this->mockCategoryRepository(['UuidCategory-1']),
             $this->mockTransactions()
         );
@@ -74,17 +74,17 @@ class CreateGenreUseCaseUnitTest extends TestCase
         $this->mockEntity->shouldReceive('createdAt')->andReturn(date('Y-m-d H:i:s'));
     }
 
-    private function mockRepository(): GenreRepositoryInterface
+    private function mockRepository(int $timesCalled = 1): GenreRepositoryInterface
     {
         $this->mockRepository = Mockery::mock(\stdClass::class, GenreRepositoryInterface::class);
-        $this->mockRepository->shouldReceive('insert')->andReturn($this->mockEntity);
+        $this->mockRepository->shouldReceive('insert')->times($timesCalled)->andReturn($this->mockEntity);
         return $this->mockRepository;
     }
 
     private function mockCategoryRepository(array $listIds = []): CategoryRepositoryInterface
     {
         $this->mockCategoryRepository = Mockery::mock(\stdClass::class, CategoryRepositoryInterface::class);
-        $this->mockCategoryRepository->shouldReceive('getListIdsByIds')->andReturn($listIds);
+        $this->mockCategoryRepository->shouldReceive('getListIdsByIds')->once()->andReturn($listIds);
         return $this->mockCategoryRepository;
     }
 

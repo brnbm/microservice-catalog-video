@@ -25,8 +25,8 @@ class DeleteGenreUseCaseUnitTest extends TestCase
         $this->mockEntity->shouldReceive('id')->andReturn($id);
 
         $this->mockRepository = Mockery::mock(\stdClass::class, GenreRepositoryInterface::class);
-        $this->mockRepository->shouldReceive('findById')->times(1)->andReturn($this->mockEntity);
-        $this->mockRepository->shouldReceive('delete')->andReturnTrue();
+        $this->mockRepository->shouldReceive('findById')->once()->andReturn($this->mockEntity);
+        $this->mockRepository->shouldReceive('delete')->once()->andReturnTrue();
 
         $this->mockInputDto = Mockery::mock(GenreInputDTO::class, [$id]);
 
