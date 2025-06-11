@@ -2,7 +2,7 @@
 
 use App\Exceptions\Handler;
 use Illuminate\Foundation\Application;
-use App\Repositories\CategoryRepository;
+use App\Repositories\Eloquent\CategoryRepository;
 use Illuminate\Foundation\Configuration\{
     Exceptions,
     Middleware

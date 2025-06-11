@@ -4,7 +4,7 @@ namespace Tests\Feature\App\Http\Controllers\API;
 
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
-use App\Repositories\CategoryRepository;
+use App\Repositories\Eloquent\CategoryRepository;
 use App\Models\Category as CategoryModel;
 use App\Http\Controllers\Api\CategoryController;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;

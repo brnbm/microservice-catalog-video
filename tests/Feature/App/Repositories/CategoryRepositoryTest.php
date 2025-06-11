@@ -5,7 +5,7 @@ namespace Tests\Feature\App\Repositories;
 use stdClass;
 use Throwable;
 use Tests\TestCase;
-use App\Repositories\CategoryRepository;
+use App\Repositories\Eloquent\CategoryRepository;
 use App\Models\Category as CategoryModel;
 use Core\Domain\Repository\PaginationInterface;
 use Core\Domain\Entity\Category as CategoryEntity;

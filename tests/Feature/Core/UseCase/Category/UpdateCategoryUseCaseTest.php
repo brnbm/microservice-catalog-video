@@ -3,7 +3,7 @@
 namespace Tests\Feature\Core\UseCase\Category;
 
 use Tests\TestCase;
-use App\Repositories\CategoryRepository;
+use App\Repositories\Eloquent\CategoryRepository;
 use App\Models\Category as CategoryModel;
 use Core\UseCase\Category\UpdateCategoryUseCase;
 use Core\UseCase\DTO\Category\CategoryUpdateInputDTO;
