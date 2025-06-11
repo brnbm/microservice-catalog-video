@@ -3,7 +3,7 @@
 namespace Core\UseCase\Genre;
 
 use Core\Domain\Exception\NotFoundDomainException;
-use Core\UseCase\Interfaces\TransactionsInterface;
+use Core\UseCase\Interfaces\TransactionInterface;
 use Core\UseCase\DTO\Genre\{GenreUpdateInputDTO, GenreOutputDTO};
 use Core\Domain\Repository\{CategoryRepositoryInterface, GenreRepositoryInterface};
 
@@ -17,7 +17,7 @@ class UpdateGenreUseCase
     public function __construct(
         private GenreRepositoryInterface $repository,
         private CategoryRepositoryInterface $categoryRepository,
-        private TransactionsInterface $transactions
+        private TransactionInterface $transaction
     ) {}
 
     public function execute(GenreUpdateInputDTO $input): GenreOutputDTO

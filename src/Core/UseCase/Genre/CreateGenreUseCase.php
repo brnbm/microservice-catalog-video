@@ -4,7 +4,7 @@ namespace Core\UseCase\Genre;
 
 use Core\Domain\Entity\GenreEntity;
 use Core\Domain\Exception\NotFoundDomainException;
-use Core\UseCase\Interfaces\TransactionsInterface;
+use Core\UseCase\Interfaces\TransactionInterface;
 use Core\UseCase\DTO\Genre\{GenreCreateInputDTO, GenreOutputDTO};
 use Core\Domain\Repository\{CategoryRepositoryInterface, GenreRepositoryInterface};
 
@@ -18,7 +18,7 @@ class CreateGenreUseCase
     public function __construct(
         private GenreRepositoryInterface $repository,
         private CategoryRepositoryInterface $categoryRepository,
-        private TransactionsInterface $transactions
+        private TransactionInterface $transaction
     ) {}
 
     public function execute(GenreCreateInputDTO $input): GenreOutputDTO
@@ -32,7 +32,7 @@ class CreateGenreUseCase
 
             $this->validateCategoriesId($input->categoriesId);
             $response = $this->repository->insert($genreEntity);
-            $this->transactions->commit();
+            $this->transaction->commit();
 
             return new GenreOutputDTO(
                 id: $response->id,
@@ -42,7 +42,7 @@ class CreateGenreUseCase
                 created_at: $response->createdAt(),
             );
         } catch (\Throwable $th) {
-            $this->transactions->rollback();
+            $this->transaction->rollback();
             throw $th;
         }
     }

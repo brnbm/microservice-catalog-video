@@ -10,7 +10,7 @@ use Core\Domain\Entity\GenreEntity;
 use PHPUnit\Framework\Attributes\Test;
 use Core\UseCase\Genre\UpdateGenreUseCase;
 use Core\Domain\Exception\NotFoundDomainException;
-use Core\UseCase\Interfaces\TransactionsInterface;
+use Core\UseCase\Interfaces\TransactionInterface;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Core\UseCase\DTO\Genre\{GenreUpdateInputDTO, GenreOutputDTO};
 use Core\Domain\Repository\{GenreRepositoryInterface, CategoryRepositoryInterface};
@@ -78,9 +78,9 @@ class UpdateGenreUseCaseUnitTest extends TestCase
         return $this->mockCategoryRepository;
     }
 
-    private function mockTransactions(): TransactionsInterface
+    private function mockTransactions(): TransactionInterface
     {
-        $this->mockTransactions = Mockery::mock(\stdClass::class, TransactionsInterface::class);
+        $this->mockTransactions = Mockery::mock(\stdClass::class, TransactionInterface::class);
         $this->mockTransactions->shouldReceive('commit');
         $this->mockTransactions->shouldReceive('rollback');
         return $this->mockTransactions;

@@ -2,7 +2,7 @@
 
 namespace Core\UseCase\Interfaces;
 
-interface TransactionsInterface
+interface TransactionInterface
 {
     public function commit(): void;
     public function rollback(): void;
