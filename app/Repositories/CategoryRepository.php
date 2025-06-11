@@ -2,11 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Presenters\PaginationPresenter;
+
 use App\Models\Category as CategoryModel;
 use Core\Domain\Repository\PaginationInterface;
 use Core\Domain\Entity\Category as CategoryEntity;
 use Core\Domain\Exception\NotFoundDomainException;
+use App\Repositories\Presenters\PaginationPresenter;
 use Core\Domain\Repository\CategoryRepositoryInterface;
 
 /**

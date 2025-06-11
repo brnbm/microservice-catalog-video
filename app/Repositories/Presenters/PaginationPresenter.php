@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Presenters;
+namespace App\Repositories\Presenters;
 
 use Core\Domain\Repository\PaginationInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
