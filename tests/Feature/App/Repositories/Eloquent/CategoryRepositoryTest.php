@@ -1,13 +1,12 @@
 <?php
 
-namespace Tests\Feature\App\Repositories;
+namespace Tests\Feature\App\Repositories\Eloquent;
 
-use stdClass;
 use Throwable;
 use Tests\TestCase;
-use App\Repositories\Eloquent\CategoryRepository;
 use App\Models\Category as CategoryModel;
 use Core\Domain\Repository\PaginationInterface;
+use App\Repositories\Eloquent\CategoryRepository;
 use Core\Domain\Entity\Category as CategoryEntity;
 use Core\Domain\Exception\NotFoundDomainException;
 use Core\Domain\Repository\CategoryRepositoryInterface;
@@ -16,14 +15,6 @@ class CategoryRepositoryTest extends TestCase
 {
     private $model;
     private $repository;
-
-    protected function setUp(): void
-    {
-        $this->model = new CategoryModel();
-        $this->repository = new CategoryRepository($this->model);
-
-        parent::setUp();
-    }
 
     public function testInsert()
     {
@@ -135,5 +126,13 @@ class CategoryRepositoryTest extends TestCase
         } catch (Throwable $th) {
             $this->assertInstanceOf(NotFoundDomainException::class, $th);
         }
+    }
+
+    protected function setUp(): void
+    {
+        $this->model = new CategoryModel();
+        $this->repository = new CategoryRepository($this->model);
+
+        parent::setUp();
     }
 }
