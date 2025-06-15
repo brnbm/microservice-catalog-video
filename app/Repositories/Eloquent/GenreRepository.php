@@ -2,18 +2,13 @@
 
 namespace App\Repositories\Eloquent;
 
-
-use App\Models\Category as CategoryModel;
+use Core\Domain\ValueObject\Uuid;
 use App\Models\Genre as GenreModel;
+use Core\Domain\Entity\GenreEntity;
 use Core\Domain\Repository\PaginationInterface;
-use Core\Domain\Entity\Category as CategoryEntity;
 use Core\Domain\Exception\NotFoundDomainException;
 use App\Repositories\Presenters\PaginationPresenter;
-use Core\Domain\Entity\GenreEntity;
-use Core\Domain\Repository\CategoryRepositoryInterface;
 use Core\Domain\Repository\GenreRepositoryInterface;
-use Core\Domain\ValueObject\Uuid;
-use DateTime;
 
 /**
  * Repository:
@@ -110,8 +105,8 @@ class GenreRepository implements GenreRepositoryInterface
             id: new Uuid($data->id),
             categoriesId: $data->categories->pluck('id')->toArray(),
             isActive: $data->is_active,
-            createdAt: new DateTime($data->created_at),
-            updatedAt: new DateTime($data->update_at)
+            createdAt: new \DateTime($data->created_at),
+            updatedAt: new \DateTime($data->update_at)
         );
     }
 }

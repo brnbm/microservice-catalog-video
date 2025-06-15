@@ -2,16 +2,12 @@
 
 namespace Tests\Feature\App\Repositories\Eloquent;
 
-use App\Models\Category as CategoryModel;
-use Throwable;
 use Tests\TestCase;
 use App\Models\Genre as GenreModel;
 use Core\Domain\Entity\GenreEntity;
+use App\Models\Category as CategoryModel;
 use App\Repositories\Eloquent\GenreRepository;
-use Core\Domain\Repository\PaginationInterface;
-use Core\Domain\Exception\NotFoundDomainException;
 use Core\Domain\Repository\GenreRepositoryInterface;
-use Database\Factories\CategoryFactory;
 
 class GenreEloquentRepositoryTest extends TestCase
 {
