@@ -11,7 +11,7 @@ use Core\Domain\Entity\Category as CategoryEntity;
 use Core\Domain\Exception\NotFoundDomainException;
 use Core\Domain\Repository\CategoryRepositoryInterface;
 
-class CategoryRepositoryTest extends TestCase
+class CategoryEloquentRepositoryTest extends TestCase
 {
     private $model;
     private $repository;
