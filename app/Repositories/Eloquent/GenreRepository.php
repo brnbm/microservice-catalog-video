@@ -39,7 +39,7 @@ class GenreRepository implements GenreRepositoryInterface
         $data = $this->model->find($id);
 
         if (is_null($data)) {
-            throw new NotFoundDomainException('Category not found.');
+            throw new NotFoundDomainException("Genre {$id} not found.");
         }
 
         return $this->toGenreEntity($data);
@@ -75,12 +75,11 @@ class GenreRepository implements GenreRepositoryInterface
         $data = $this->model->find($entity->id);
 
         if (is_null($data)) {
-            throw new NotFoundDomainException('Genre not found.');
+            throw new NotFoundDomainException("Genre [{$entity->id}] not found.");
         }
 
         $data->update([
             'name' => $entity->name,
-            'description' => $entity->description,
             'is_active' => $entity->isActive
         ]);
 

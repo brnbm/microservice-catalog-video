@@ -7,7 +7,10 @@ use App\Models\Genre as GenreModel;
 use Core\Domain\Entity\GenreEntity;
 use App\Models\Category as CategoryModel;
 use App\Repositories\Eloquent\GenreRepository;
+use Core\Domain\Repository\PaginationInterface;
+use Core\Domain\Exception\NotFoundDomainException;
 use Core\Domain\Repository\GenreRepositoryInterface;
+
 
 class GenreEloquentRepositoryTest extends TestCase
 {
@@ -46,105 +49,117 @@ class GenreEloquentRepositoryTest extends TestCase
         $this->assertDatabaseCount('category_genre', 2);
     }
 
-    // public function testFindById()
-    // {
-    //     /**
-    //      * * Gera 1 registro fake no banco de dados testing
-    //      */
-    //     $category = GenreModel::factory()->create();
+    public function testFindById()
+    {
+        /**
+         * * Gera 1 registro fake no banco de dados testing
+         */
+        $genre = GenreModel::factory()->create();
 
-    //     $response = $this->repository->findById($category->id);
+        $response = $this->repository->findById($genre->id);
 
-    //     $this->assertInstanceOf(GenreRepositoryInterface::class, $this->repository);
-    //     $this->assertInstanceOf(GenreEntity::class, $response);
-    //     $this->assertEquals($category->id, $response->id);
-    // }
+        $this->assertInstanceOf(GenreRepositoryInterface::class, $this->repository);
+        $this->assertInstanceOf(GenreEntity::class, $response);
+        $this->assertEquals($genre->id, $response->id);
+    }
 
-    // public function testFindByIdNotFound()
-    // {
-    //     try {
-    //         $this->repository->findById('fakeID');
-    //     } catch (Throwable $th) {
-    //         $this->assertInstanceOf(NotFoundDomainException::class, $th);
-    //     }
-    // }
+    public function testFindByIdNotFound()
+    {
+        try {
+            $this->repository->findById('fakeID');
+        } catch (\Throwable $th) {
+            $this->assertInstanceOf(NotFoundDomainException::class, $th);
+        }
+    }
 
-    // public function testFindAll()
-    // {
-    //     /**
-    //      * * Gera 10 registros fake no banco de dados testing
-    //      */
-    //     GenreModel::factory()->count(10)->create();
+    public function testFindAll()
+    {
+        /**
+         * * Gera 10 registros fake no banco de dados testing
+         */
+        GenreModel::factory()->count(10)->create();
 
-    //     $response = $this->repository->findAll();
-    //     $this->assertCount(10, $response);
-    // }
+        $response = $this->repository->findAll();
+        $this->assertCount(10, $response);
+    }
 
-    // public function testPaginate()
-    // {
-    //     GenreModel::factory()->count(20)->create();
+    public function testFindAllWithFilter()
+    {
+        /**
+         * * Gera 10 registros fake no banco de dados testing
+         */
+        GenreModel::factory()->count(10)->create();
+        /**
+         * * Gera 1 registro fake no banco de dados testing
+         */
+        GenreModel::factory()->create(['name' => 'Genre A']);
 
-    //     $perPage = 10;
-    //     $response = $this->repository->paginate(totalPage: $perPage);
+        $response = $this->repository->findAll();
+        $this->assertCount(11, $response);
 
-    //     $this->assertInstanceOf(PaginationInterface::class, $response);
-    //     $this->assertEquals($perPage, $response->perPage());
-    //     $this->assertIsArray($response->items());
-    // }
+        $response = $this->repository->findAll(filter: 'Genre A');
+        $this->assertCount(1, $response);
+    }
 
-    // public function testPaginateEmpty()
-    // {
-    //     $response = $this->repository->paginate();
+    public function testPaginate()
+    {
+        GenreModel::factory()->count(20)->create();
 
-    //     $this->assertInstanceOf(PaginationInterface::class, $response);
-    //     $this->assertEquals(0, $response->total());
-    // }
+        $perPage = 10;
+        $response = $this->repository->paginate(totalPage: $perPage);
 
-    // public function testUpdate()
-    // {
-    //     $category = GenreModel::factory()->create();
-    //     $responsefindById = $this->repository->findById($category->id);
+        $this->assertInstanceOf(PaginationInterface::class, $response);
+        $this->assertEquals($perPage, $response->perPage());
+        $this->assertIsArray($response->items());
+    }
 
-    //     $responsefindById->update(name: 'Genre Updated', isActive: false);
+    public function testPaginateEmpty()
+    {
+        $response = $this->repository->paginate();
 
-    //     $responseUpdate = $this->repository->update($responsefindById);
+        $this->assertInstanceOf(PaginationInterface::class, $response);
+        $this->assertEquals(0, $response->total());
+    }
 
-    //     $this->assertInstanceOf(GenreEntity::class, $responseUpdate);
-    //     $this->assertEquals('Genre Updated', $responseUpdate->name);
-    //     $this->assertEquals(false, $responseUpdate->isActive);
-    // }
+    public function testUpdate()
+    {
+        $genre = GenreModel::factory()->create();
+        $responsefindById = $this->repository->findById($genre->id);
 
-    // public function testUpdateException()
-    // {
-    //     $categoryEntity = new GenreEntity(
-    //         name: 'Category A',
-    //         // description: 'Description Category A'
-    //     );
+        $responsefindById->update(name: 'Genre Updated');
+        $responsefindById->deactivate();
 
-    //     try {
-    //         $this->repository->update($categoryEntity);
-    //     } catch (Throwable $th) {
-    //         $this->assertInstanceOf(NotFoundDomainException::class, $th);
-    //     }
-    // }
+        $responseUpdate = $this->repository->update($responsefindById);
 
-    // public function testDelete()
-    // {
-    //     $category = GenreModel::factory()->create();
+        $this->assertInstanceOf(GenreEntity::class, $responseUpdate);
+        $this->assertEquals('Genre Updated', $responseUpdate->name);
+        $this->assertEquals(false, $responseUpdate->isActive);
+    }
 
-    //     $isDeleted = $this->repository->delete($category->id);
+    public function testUpdateException()
+    {
+        $this->expectException(NotFoundDomainException::class);
 
-    //     $this->assertTrue($isDeleted);
-    // }
+        $genreEntity = new GenreEntity(name: 'Category A');
 
-    // public function testDeleteException()
-    // {
-    //     try {
-    //         $this->repository->delete('fakeID');
-    //     } catch (Throwable $th) {
-    //         $this->assertInstanceOf(NotFoundDomainException::class, $th);
-    //     }
-    // }
+        $this->repository->update($genreEntity);
+    }
+
+    public function testDelete()
+    {
+        $genre = GenreModel::factory()->create();
+
+        $this->repository->delete($genre->id);
+
+        $this->assertSoftDeleted($this->model->getTable(), ['id' => $genre->id]);
+    }
+
+    public function testDeleteException()
+    {
+        $this->expectException(NotFoundDomainException::class);
+
+        $this->repository->delete('fakeID');
+    }
 
     protected function setUp(): void
     {
