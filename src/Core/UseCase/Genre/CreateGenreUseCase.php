@@ -49,14 +49,13 @@ class CreateGenreUseCase
 
     public function validateCategoriesId(array $categoriesId): void
     {
-
         $categories = $this->categoryRepository->getListIdsByIds($categoriesId);
         $arrayDiff = array_diff($categoriesId, $categories);
 
         if (count($arrayDiff)) {
             $msg = sprintf(
-                '%s %s not found.',
-                count($arrayDiff) > 1 ? 'Categories' : 'Category',
+                "%s [%s] not found.",
+                count($arrayDiff) > 1 ? "Categories" : "Category",
                 implode(', ', $arrayDiff)
             );
             throw new NotFoundDomainException($msg);
