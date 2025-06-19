@@ -44,7 +44,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function getListIdsByIds(array $ids = []): array
     {
-        return $this->model->whereIn('id', $ids)->pluck('id');
+        return $this->model->whereIn('id', $ids)->pluck('id')->toArray();;
     }
 
     public function findAll(string $filter = '', string $order = 'DESC'): array
