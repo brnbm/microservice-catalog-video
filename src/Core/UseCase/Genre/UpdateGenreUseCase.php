@@ -22,29 +22,35 @@ class UpdateGenreUseCase
 
     public function execute(GenreUpdateInputDTO $input): GenreOutputDTO
     {
-        $genre = $this->repository->findById($input->id);
+        try {
+            $genre = $this->repository->findById($input->id);
 
-        $genre->update($input->name);
-        $input->is_active ? $genre->activate() : $genre->deactivate();
+            $genre->update($input->name);
+            $input->is_active ? $genre->activate() : $genre->deactivate();
 
-        if (count($input->categoriesId)) {
-            $this->validateCategoriesId($input->categoriesId);
+            if (count($input->categoriesId)) {
+                $this->validateCategoriesId($input->categoriesId);
 
-            foreach ($input->categoriesId as $categoryId) {
-                $genre->addCategory($categoryId);
+                foreach ($input->categoriesId as $categoryId) {
+                    $genre->addCategory($categoryId);
+                }
             }
+
+            $responseUseCase = $this->repository->update($genre);
+            $this->transaction->commit();
+
+            return new GenreOutputDTO(
+                id: $responseUseCase->id,
+                name: $responseUseCase->name,
+                categoriesId: $responseUseCase->categoriesId,
+                is_active: $responseUseCase->isActive,
+                created_at: $responseUseCase->createdAt(),
+                updated_at: $responseUseCase->updatedAt()
+            );
+        } catch (\Throwable $th) {
+            $this->transaction->rollback();
+            throw $th;
         }
-
-        $responseUseCase = $this->repository->update($genre);
-
-        return new GenreOutputDTO(
-            id: $responseUseCase->id,
-            name: $responseUseCase->name,
-            categoriesId: $responseUseCase->categoriesId,
-            is_active: $responseUseCase->isActive,
-            created_at: $responseUseCase->createdAt(),
-            updated_at: $responseUseCase->updatedAt()
-        );
     }
 
     public function validateCategoriesId(array $categoriesId): void
