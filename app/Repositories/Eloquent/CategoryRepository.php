@@ -36,7 +36,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $data = $this->model->find($id);
 
         if (is_null($data)) {
-            throw new NotFoundDomainException('Category not found.');
+            throw new NotFoundDomainException("Category [{$id}] not found.");
         }
 
         return $this->toCategoryEntity($data);
@@ -89,7 +89,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $data = $this->model->find($id);
 
         if (is_null($data)) {
-            throw new NotFoundDomainException('Category not found.');
+            throw new NotFoundDomainException("Category [{$id}] not found.");
         }
 
         return $data->delete();
