@@ -25,6 +25,7 @@ class UpdateGenreUseCase
         $genre = $this->repository->findById($input->id);
 
         $genre->update($input->name);
+        $input->is_active ? $genre->activate() : $genre->deactivate();
 
         if (count($input->categoriesId)) {
             $this->validateCategoriesId($input->categoriesId);
@@ -34,15 +35,15 @@ class UpdateGenreUseCase
             }
         }
 
-        $response = $this->repository->update($genre);
+        $responseUseCase = $this->repository->update($genre);
 
         return new GenreOutputDTO(
-            id: $response->id,
-            name: $response->name,
-            categoriesId: $response->categoriesId,
-            is_active: $response->isActive,
-            created_at: $response->createdAt(),
-            updated_at: $response->updatedAt()
+            id: $responseUseCase->id,
+            name: $responseUseCase->name,
+            categoriesId: $responseUseCase->categoriesId,
+            is_active: $responseUseCase->isActive,
+            created_at: $responseUseCase->createdAt(),
+            updated_at: $responseUseCase->updatedAt()
         );
     }
 
@@ -54,7 +55,7 @@ class UpdateGenreUseCase
 
         if (count($arrayDiff)) {
             $msg = sprintf(
-                '%s %s not found.',
+                '%s [%s] not found.',
                 count($arrayDiff) > 1 ? 'Categories' : 'Category',
                 implode(', ', $arrayDiff)
             );
