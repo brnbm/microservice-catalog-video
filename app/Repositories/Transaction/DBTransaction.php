@@ -7,7 +7,7 @@ use Core\UseCase\Interfaces\TransactionInterface;
 
 class DBTransaction implements TransactionInterface
 {
-    public function __construct($pdo)
+    public function __construct()
     {
         DB::beginTransaction();
     }
