@@ -28,9 +28,9 @@ class ListCategoriesUseCaseTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $repository = new CategoryRepository(new CategoryModel());
         $this->useCase = new ListCategoriesUseCase($repository);
-
-        parent::setUp();
     }
 }

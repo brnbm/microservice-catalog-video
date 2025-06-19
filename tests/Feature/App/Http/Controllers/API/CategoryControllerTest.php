@@ -119,8 +119,9 @@ class CategoryControllerTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->controller = new CategoryController();
         $this->repository = new CategoryRepository(new CategoryModel());
-        parent::setUp();
     }
 }

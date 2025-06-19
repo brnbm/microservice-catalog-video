@@ -163,9 +163,9 @@ class GenreEloquentRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->model = new GenreModel();
         $this->repository = new GenreRepository($this->model);
-
-        parent::setUp();
     }
 }
